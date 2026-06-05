@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roshambo | Ultimate Rock Paper Scissors</title>
+    <meta name="description" content="Experience the ultimate premium, neon-styled Rock Paper Scissors game featuring sound effects, win streaks, and animated battles.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Global SVG gradients definitions (placed outside hidden panels so they are always available) -->
+    <svg style="width: 0; height: 0; position: absolute;" aria-hidden="true">
+        <defs>
+            <linearGradient id="rock-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#00f2fe" />
+                <stop offset="100%" stop-color="#4facfe" />
+            </linearGradient>
+            <linearGradient id="paper-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ff0844" />
+                <stop offset="100%" stop-color="#ffb199" />
+            </linearGradient>
+            <linearGradient id="scissors-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#f9d423" />
+                <stop offset="100%" stop-color="#ff4e50" />
+            </linearGradient>
+        </defs>
+    </svg>
+
+    <div class="stars-bg"></div>
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+
+    <div class="container">
+        <!-- Top bar / Header -->
+        <header class="app-header">
+            <h1 class="logo-title">ROSHAMBO</h1>
+            <div class="controls">
+                <button id="sound-toggle" class="control-btn" aria-label="Toggle Sound">
+                    <svg class="control-icon" viewBox="0 0 24 24" width="24" height="24">
+                        <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+                    </svg>
+                    <span>Sound On</span>
+                </button>
+                <button id="reset-btn" class="control-btn secondary" aria-label="Reset Game">
+                    <svg class="control-icon" viewBox="0 0 24 24" width="24" height="24">
+                        <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+                    </svg>
+                    <span>Reset</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Scoreboard Dashboard -->
+        <section class="scoreboard-dashboard" aria-label="Game Stats">
+            <div class="score-card player-card">
+                <span class="score-label">YOU</span>
+                <span id="user-score" class="score-num">0</span>
+            </div>
+            
+            <div class="score-card streak-card">
+                <span class="score-label">STREAK</span>
+                <span id="win-streak" class="score-num warning">0</span>
+            </div>
+
+            <div class="score-card comp-card">
+                <span class="score-label">CPU</span>
+                <span id="comp-score" class="score-num">0</span>
+            </div>
+        </section>
+
+        <!-- Main Gameplay Arena -->
+        <main class="gameplay-arena">
+            <!-- Phase 1: Selection View -->
+            <div id="selection-view" class="view-panel active">
+                <h2 class="section-title">CHOOSE YOUR WEAPON</h2>
+                <div class="choices">
+                    <button class="choice" id="rock" aria-label="Select Rock">
+                        <div class="svg-container">
+                            <svg viewBox="0 0 100 100" class="choice-svg rock-svg">
+                                <path d="M 50 15 L 80 35 L 80 65 L 50 85 L 20 65 L 20 35 Z" fill="url(#rock-grad)" opacity="0.15" stroke="url(#rock-grad)" stroke-width="3" />
+                                <path d="M 50 15 L 50 85" stroke="url(#rock-grad)" stroke-width="1.5" opacity="0.4" />
+                                <path d="M 20 35 L 80 65" stroke="url(#rock-grad)" stroke-width="1.5" opacity="0.4" />
+                                <path d="M 80 35 L 20 65" stroke="url(#rock-grad)" stroke-width="1.5" opacity="0.4" />
+                                <polygon points="50,25 70,40 50,55 30,40" fill="url(#rock-grad)" opacity="0.3" stroke="url(#rock-grad)" stroke-width="2" />
+                                <polygon points="50,55 70,70 50,75 30,70" fill="url(#rock-grad)" opacity="0.2" stroke="url(#rock-grad)" stroke-width="2" />
+                            </svg>
+                        </div>
+                        <span class="choice-label">ROCK</span>
+                    </button>
+                    
+                    <button class="choice" id="paper" aria-label="Select Paper">
+                        <div class="svg-container">
+                            <svg viewBox="0 0 100 100" class="choice-svg paper-svg">
+                                <rect x="25" y="20" width="45" height="55" rx="5" fill="none" stroke="url(#paper-grad)" stroke-width="2.5" opacity="0.4" transform="rotate(-6 47.5 47.5)" />
+                                <rect x="30" y="25" width="45" height="55" rx="5" fill="url(#paper-grad)" opacity="0.15" stroke="url(#paper-grad)" stroke-width="3" />
+                                <line x1="40" y1="40" x2="65" y2="40" stroke="url(#paper-grad)" stroke-width="2" stroke-linecap="round" opacity="0.6" />
+                                <line x1="40" y1="50" x2="65" y2="50" stroke="url(#paper-grad)" stroke-width="2" stroke-linecap="round" opacity="0.6" />
+                                <line x1="40" y1="60" x2="55" y2="60" stroke="url(#paper-grad)" stroke-width="2" stroke-linecap="round" opacity="0.6" />
+                            </svg>
+                        </div>
+                        <span class="choice-label">PAPER</span>
+                    </button>
+                    
+                    <button class="choice" id="scissors" aria-label="Select Scissors">
+                        <div class="svg-container">
+                            <svg viewBox="0 0 100 100" class="choice-svg scissors-svg">
+                                <path d="M 25 75 C 20 70 20 60 25 55 C 30 50 40 50 45 55 L 75 25" fill="none" stroke="url(#scissors-grad)" stroke-width="3" stroke-linecap="round" />
+                                <path d="M 75 75 C 80 70 80 60 75 55 C 70 50 60 50 55 55 L 25 25" fill="none" stroke="url(#scissors-grad)" stroke-width="3" stroke-linecap="round" />
+                                <circle cx="50" cy="50" r="4" fill="url(#scissors-grad)" stroke="#0d0f1d" stroke-width="2" />
+                                <circle cx="28" cy="67" r="5" fill="none" stroke="url(#scissors-grad)" stroke-width="1.5" opacity="0.5" />
+                                <circle cx="72" cy="67" r="5" fill="none" stroke="url(#scissors-grad)" stroke-width="1.5" opacity="0.5" />
+                            </svg>
+                        </div>
+                        <span class="choice-label">SCISSORS</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Phase 2: Battle Arena View (Hidden by default) -->
+            <div id="battle-view" class="view-panel">
+                <div class="battle-arena">
+                    <div class="battle-side player-side">
+                        <span class="battle-label">YOU CHOSE</span>
+                        <div id="player-battle-card" class="battle-card">
+                            <!-- Injected dynamically via script.js -->
+                        </div>
+                    </div>
+                    
+                    <div class="battle-vs-container">
+                        <span class="vs-glow">VS</span>
+                    </div>
+
+                    <div class="battle-side comp-side">
+                        <span class="battle-label">CPU CHOSE</span>
+                        <div id="comp-battle-card" class="battle-card scanning">
+                            <!-- Injected dynamically via script.js -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Message and Controls Panel -->
+        <section class="message-center" aria-label="Game Feedback">
+            <div class="msg-container">
+                <p id="msg">Play your move</p>
+            </div>
+            <button id="next-btn" class="action-btn hidden" aria-label="Next Round">NEXT ROUND</button>
+        </section>
+
+        <!-- Match History Logs -->
+        <section class="history-section" aria-label="Match History">
+            <h3 class="history-title">MATCH HISTORY</h3>
+            <div id="history-list" class="history-list">
+                <div class="history-empty">No games played yet. Make a move!</div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Hidden Netlify Form to capture match logs/history -->
+    <form name="roshambo-match-history" data-netlify="true" hidden>
+        <input type="hidden" name="form-name" value="roshambo-match-history">
+        <input type="text" name="player-score">
+        <input type="text" name="cpu-score">
+        <input type="text" name="win-streak">
+        <input type="text" name="player-choice">
+        <input type="text" name="cpu-choice">
+        <input type="text" name="result">
+        <input type="text" name="timestamp">
+    </form>
+
+    <script src="script.js"></script> 
+</body>
+</html>
